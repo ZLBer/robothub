@@ -21,7 +21,7 @@ spring:
         encrypt.enabled: false
         git:
           uri: https://github.com/ZLBer/robothub-config
-          searchPaths: zuulservice
+          searchPaths: zuulservice,exampleservice,hubservice
           username: native-cloud-apps
           password: 0ffended
 

@@ -24,7 +24,7 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>edu.hust</groupId>
             <artifactId>hub-core</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -34,7 +34,7 @@
                     <artifactId>slf4j-simple</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
