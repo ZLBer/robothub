@@ -14,6 +14,7 @@
         <module>hub-service</module>
         <module>hub-zuul</module>
         <module>hub-euraka</module>
+        <module>example-service</module>
     </modules>
 
     <dependencies>
