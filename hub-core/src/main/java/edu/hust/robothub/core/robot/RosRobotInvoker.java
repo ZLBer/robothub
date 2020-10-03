@@ -23,6 +23,15 @@ import org.slf4j.LoggerFactory;
 public class RosRobotInvoker implements Robot {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RosRobotInvoker.class);
+
+    public Ros getRos() {
+        return ros;
+    }
+
+    public void setRos(Ros ros) {
+        this.ros = ros;
+    }
+
     private Ros ros;
     public RosRobotInvoker(Ros ros) {
         this.ros = ros;
