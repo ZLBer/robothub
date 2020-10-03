@@ -1,13 +1,13 @@
 package edu.hust.robothub.core.message;
 
 public abstract class AbstractMessage {
-    String data;
+    String message;
 
-    public String getData() {
-        return data;
+    public String getMessage() {
+        return message;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

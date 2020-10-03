@@ -16,11 +16,11 @@ public class RosMessage extends AbstractMessage {
     ServiceResponse rosServiceResponse;
     public RosMessage(Message rosMessage) {
         this.rosMessage = rosMessage;
-        this.data = rosMessage.toString();
+        this.message = rosMessage.toString();
     }
 
     public RosMessage(String data){
-        this.data=data;
+        this.message =data;
         this.rosMessage= new Message(data);
     }
 
@@ -30,7 +30,7 @@ public class RosMessage extends AbstractMessage {
     }
 
     public  RosMessage(ServiceMessage serviceMessage){
-       rosMessage=new Message(serviceMessage.data);
+       rosMessage=new Message(serviceMessage.message);
     }
 
     public Message getRosMessage() {
