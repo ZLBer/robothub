@@ -9,4 +9,7 @@ public class ServiceMessage extends AbstractMessage {
     public ServiceMessage(String ms) {
         this.message =ms;
     }
+
+    public ServiceMessage() {
+    }
 }

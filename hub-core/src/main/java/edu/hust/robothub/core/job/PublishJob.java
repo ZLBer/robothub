@@ -3,7 +3,7 @@ package edu.hust.robothub.core.job;
 import edu.hust.robothub.core.context.RobotContext;
 import edu.hust.robothub.core.context.ServiceContext;
 import edu.hust.robothub.core.message.RosMessage;
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 
 /** publish 消息到topic，无回调
  */  
@@ -17,9 +17,9 @@ public class PublishJob extends AbstractJob {
 
     @Override
     public void doRun() {
-        RosRobotInstance rosRobotInstance = robotContext.getRosRobotInstance();
+        RosRobotInvokerWithContext rosRobotInvokerWithContext = robotContext.getRosRobotInvokerWithContext();
        // rosRobotInstance.connect();
-        rosRobotInstance.publish(rosMessage);
+        rosRobotInvokerWithContext.publish(rosMessage);
     }
 
     public RosMessage getRosMessage() {

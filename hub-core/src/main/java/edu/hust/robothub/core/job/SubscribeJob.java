@@ -2,7 +2,7 @@ package edu.hust.robothub.core.job;
 
 import edu.hust.robothub.core.context.RobotContext;
 import edu.hust.robothub.core.context.ServiceContext;
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 
 
 /**订阅topic消息，有回调
@@ -15,9 +15,9 @@ public class SubscribeJob extends AbstractJob {
 
     @Override
     public void doRun() {
-        RosRobotInstance rosRobotInstance = robotContext.getRosRobotInstance();
+        RosRobotInvokerWithContext rosRobotInvokerWithContext = robotContext.getRosRobotInvokerWithContext();
         //rosRobotInstance.connect();
-        rosRobotInstance.subscribe();
+        rosRobotInvokerWithContext.subscribe();
     }
 
 }

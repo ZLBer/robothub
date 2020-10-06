@@ -1,6 +1,6 @@
 package hust.robothub.core.robot;
 
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 import edu.wpi.rail.jrosbridge.Ros;
 import edu.wpi.rail.jrosbridge.services.ServiceRequest;
 import edu.hust.robothub.core.context.RobotContext;
@@ -38,7 +38,7 @@ public  void before() throws Exception {
     robotContext.setServiceName("");
     robotContext.setServiceType("");
     robotContext.setServiceRequest(new ServiceRequest("{}"));
-    RosRobotInstance rosRobotInstance=new RosRobotInstance(robotContext);
+    RosRobotInvokerWithContext rosRobotInvokerWithContext =new RosRobotInvokerWithContext(robotContext);
 
     //build servicecontext
 
@@ -56,7 +56,7 @@ public  void before() throws Exception {
 
     robotContext.setHandler(handlerChain);
 
-    robotContext.setRosRobotInstance(rosRobotInstance);
+    robotContext.setRosRobotInvokerWithContext(rosRobotInvokerWithContext);
 
 
     subscribeJob=new SubscribeJob("test-job",robotContext,serviceContext);
@@ -90,8 +90,7 @@ public void testGetInstance() throws Exception {
 */ 
 @Test
 public void testCatchJob() throws Exception { 
-//TODO: Test goes here... 
-} 
+}
 
 /** 
 * 
@@ -100,8 +99,7 @@ public void testCatchJob() throws Exception {
 */ 
 @Test
 public void testCleanJon() throws Exception { 
-//TODO: Test goes here... 
-} 
+}
 
 /** 
 * 
@@ -110,7 +108,6 @@ public void testCleanJon() throws Exception {
 */ 
 @Test
 public void testExecute() throws Exception { 
-//TODO: Test goes here... 
 }
 
 } 

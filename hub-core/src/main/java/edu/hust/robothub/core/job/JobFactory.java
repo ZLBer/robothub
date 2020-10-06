@@ -12,7 +12,7 @@ import edu.hust.robothub.core.message.RosMessage;
 import edu.hust.robothub.core.result.ResultKV;
 import edu.hust.robothub.core.robot.Robot;
 import edu.hust.robothub.core.robot.RobotManager;
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 import edu.hust.robothub.core.robot.RosRobotInvoker;
 import edu.hust.robothub.core.service.AbstractClient;
 import edu.hust.robothub.core.service.ServiceInvoker;
@@ -36,18 +36,18 @@ import java.util.Map;
     }
 
     public  ResultKV<AbstractJob> create(int jobType, String jobName,String hostname, int port, Map<String,Object> args){
-        AbstractJob job=null;
+        ResultKV<AbstractJob> res=null;
        if(AbstractJob.JOBTYPE_PUBLISH==jobType){
-           createPublishJob(jobName,hostname,port,(String)args.get("publishTopicName"),(String)args.get("publicTopicType"),new RosMessage((String)args.get("rosMessage")));
+          res= createPublishJob(jobName,hostname,port,(String)args.get("publishTopicName"),(String)args.get("publicTopicType"),new RosMessage((String)args.get("rosMessage")));
        }else if(AbstractJob.JOBTYPE_SERVICE==jobType){
-           createServiceJob(jobName,hostname,port,(String)args.get("serviceName"),(String)args.get("serviceType"),new ServiceRequest((String)args.get("serviceRequest")));
+           res= createServiceJob(jobName,hostname,port,(String)args.get("serviceName"),(String)args.get("serviceType"),new ServiceRequest((String)args.get("serviceRequest")));
        }else if(AbstractJob.JOBTYPE_SUBSCRIBE==jobType){
-           createSubscribeJob(jobName,hostname,port,(AbstractClient)args.get("abstractClient"),(int)args.get("httpMethod"),(Map<String, String>) args.get("headers"),(String) args.get("subscribeTopicName"),(String)args.get("subscribeTopicType"),(String)args.get("publishTopicName"),(String)args.get("publicTopicType"));
+           res=  createSubscribeJob(jobName,hostname,port,(AbstractClient)args.get("abstractClient"),Integer.parseInt((String) args.get("httpMethod")),(Map<String, String>) args.get("headers"),(String) args.get("subscribeTopicName"),(String)args.get("subscribeTopicType"),(String)args.get("publishTopicName"),(String)args.get("publicTopicType"));
        }else {
            LOGGER.error("no this type job");
            return new ResultKV<>(false,null);
        }
-     return new ResultKV<>(true,job);
+     return res==null?new ResultKV<>(false,null):res;
     }
 
 
@@ -61,17 +61,18 @@ import java.util.Map;
         robotContext.setRos(robot.getRos());
         robotContext.setPublishTopicName(publishTopicName);
         robotContext.setPublishTopicType(publicTopicType);
-        RosRobotInstance rosRobotInstance = new RosRobotInstance(robotContext);
+        RosRobotInvokerWithContext rosRobotInvokerWithContext = new RosRobotInvokerWithContext(robotContext);
 
         //build servicecontext
         ServiceContext serviceContext = new ServiceContext();
 
         robotContext.setHandler(new HandlerChain(robotContext, serviceContext));
-        robotContext.setRosRobotInstance(rosRobotInstance);
+        robotContext.setRosRobotInvokerWithContext(rosRobotInvokerWithContext);
 
 
         PublishJob publishJob = new PublishJob(jobName, robotContext, serviceContext);
         publishJob.setRosMessage(rosMessage);
+        serviceContext.setJobId(publishJob.getJobId());
 
         return new ResultKV<>(true, publishJob);
     }
@@ -96,7 +97,7 @@ import java.util.Map;
         robotContext.setSubscribeTopicType(subscribeTopicType);
         robotContext.setPublishTopicName(publishTopicName);
         robotContext.setPublishTopicType(publicTopicType);
-        RosRobotInstance rosRobotInstance=new RosRobotInstance(robotContext);
+        RosRobotInvokerWithContext rosRobotInvokerWithContext =new RosRobotInvokerWithContext(robotContext);
 
         //build servicecontext
 
@@ -118,11 +119,11 @@ import java.util.Map;
 
         robotContext.setHandler(handlerChain);
 
-        robotContext.setRosRobotInstance(rosRobotInstance);
+        robotContext.setRosRobotInvokerWithContext(rosRobotInvokerWithContext);
 
 
         SubscribeJob subscribeJob=new SubscribeJob(jobName,robotContext,serviceContext);
-
+        serviceContext.setJobId(subscribeJob.getJobId());
         return new ResultKV<>(true, subscribeJob);
     }
 
@@ -136,27 +137,27 @@ import java.util.Map;
         robotContext.setRos(robot.getRos());
         robotContext.setServiceName(serviceName);
         robotContext.setServiceType(serviceType);
-        RosRobotInstance rosRobotInstance = new RosRobotInstance(robotContext);
+        RosRobotInvokerWithContext rosRobotInvokerWithContext = new RosRobotInvokerWithContext(robotContext);
         robotContext.setServiceRequest(serviceRequest);
         //build servicecontext
 
         ServiceContext serviceContext = new ServiceContext();
 
+
         //build handlerChain
         HandlerChain handlerChain = new HandlerChain(robotContext, serviceContext);
         AbstractHandler handler1 = new ServiceInvokerHander(robotContext, serviceContext);
-        AbstractHandler handler3 = new MessageConvertHandler(robotContext, serviceContext);
-        AbstractHandler handler5 = new MessageConvertHandler(robotContext, serviceContext);
-        AbstractHandler handler4 = new DetectInterruptHandler(robotContext, serviceContext);
-        handlerChain.buildHandlerChain(handler4, handler3, handler1);
+        AbstractHandler handler2 = new DetectInterruptHandler(robotContext, serviceContext);
+        AbstractHandler handler3 = new MessageConvertHandler(robotContext,serviceContext);
+        handlerChain.buildHandlerChain(handler2, handler3,handler1);
 
         robotContext.setHandler(handlerChain);
 
-        robotContext.setRosRobotInstance(rosRobotInstance);
+        robotContext.setRosRobotInvokerWithContext(rosRobotInvokerWithContext);
 
 
         ServiceJob serviceJob = new ServiceJob(jobName, robotContext, serviceContext);
-
+        serviceContext.setJobId(serviceJob.getJobId());
         return new ResultKV<>(true, serviceJob);
     }
 }

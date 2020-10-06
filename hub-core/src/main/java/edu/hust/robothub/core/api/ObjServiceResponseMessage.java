@@ -2,11 +2,11 @@ package edu.hust.robothub.core.api;
 
 import java.util.Map;
 
-public class ObjApiValue<T> extends ApiValue {
+public class ObjServiceResponseMessage<T> extends ServiceResponseMessage {
 
     T data;
 
-    public ObjApiValue(int code, String msg, Map<String, String> extra,T data) {
+    public ObjServiceResponseMessage(int code, String msg, Map<String, String> extra, T data) {
         super(code, msg, extra);
         this.data = data;
     }

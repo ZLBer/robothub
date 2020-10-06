@@ -5,40 +5,42 @@ import edu.hust.robothub.core.context.ServiceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
 abstract public class AbstractJob implements Job, Runnable {
+    public static final int STATUS_NEW = 0;
     public static final int STATUS_RUNING = 1;
-    public static final int STATUS_NEW = 1;
     public static final int STATUS_END = 2;
-    public static final  int JOBTYPE_PUBLISH = 0;
-    public static final  int JOBTYPE_SERVICE = 1;
-    public static final  int JOBTYPE_SUBSCRIBE = 2;
+    public static final int STATUS_FREE = 3;
+    public static final int STATUS_INTERUPTEED = 4;
+
+    public static final int JOBTYPE_PUBLISH = 0;
+    public static final int JOBTYPE_SERVICE = 1;
+    public static final int JOBTYPE_SUBSCRIBE = 2;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJob.class);
     RobotContext robotContext;
     ServiceContext serviceContext;
-    private String jobName;
-    private String jobId;
-    private long startTime;
-    private volatile int status;
     int jobType;
     Thread jobExecuteThread;
+    private String jobName;
+    private String jobId;
+    private long createTime;
+    private volatile int status;
 
     public AbstractJob(String jobName, RobotContext robotContext, ServiceContext serviceContext) {
         this.jobName = jobName;
         this.robotContext = robotContext;
-        startTime = System.nanoTime();
+        createTime = System.nanoTime();
         this.serviceContext = serviceContext;
         status = STATUS_NEW;
-        jobId=UUID.randomUUID().toString();
+        jobId = UUID.randomUUID().toString();
     }
 
     public void run() {
 
-        this.setJobExecuteThread(Thread.currentThread()); //设置执行线程
+        this.sJobExecuteThread(Thread.currentThread()); //设置执行线程
 
         this.status = STATUS_RUNING;
 
@@ -72,12 +74,28 @@ abstract public class AbstractJob implements Job, Runnable {
         this.jobId = jobId;
     }
 
-    public Thread getJobExecuteThread() {
+    public Thread gJobExecuteThread() {
         return jobExecuteThread;
     }
 
-    public void setJobExecuteThread(Thread jobExecuteThread) {
+    public void sJobExecuteThread(Thread jobExecuteThread) {
         this.jobExecuteThread = jobExecuteThread;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(int jobType) {
+        this.jobType = jobType;
     }
 
     @Override

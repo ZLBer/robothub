@@ -27,7 +27,7 @@ public class PublishServiceCallbackHandler extends ServiceCallbackHandler {
     AbstractMessage doCallBack(AbstractMessage abstractMessage) {
         LOGGER.info("PublishServiceCallbackHandler begin  handle");
         RosMessage rosMessage = (RosMessage) abstractMessage;
-        robotContext.getRosRobotInstance().publish(rosMessage);
+        robotContext.getRosRobotInvokerWithContext().publish(rosMessage);
         return null;
     }
 

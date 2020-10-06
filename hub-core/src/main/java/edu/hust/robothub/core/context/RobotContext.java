@@ -1,7 +1,7 @@
 package edu.hust.robothub.core.context;
 
 import edu.hust.robothub.core.handler.Handler;
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 import edu.wpi.rail.jrosbridge.Ros;
 import edu.wpi.rail.jrosbridge.Topic;
 import edu.wpi.rail.jrosbridge.services.ServiceRequest;
@@ -17,8 +17,7 @@ public class RobotContext implements Context {
     String serviceName;
     String serviceType;
     ServiceRequest serviceRequest;
-    ServiceResponse serviceResponse;
-    RosRobotInstance rosRobotInstance;
+    RosRobotInvokerWithContext rosRobotInvokerWithContext;
     Handler handler;
 
     public Topic getSubscribeTopic() {
@@ -29,12 +28,12 @@ public class RobotContext implements Context {
         this.subscribeTopic = subscribeTopic;
     }
 
-    public RosRobotInstance getRosRobotInstance() {
-        return rosRobotInstance;
+    public RosRobotInvokerWithContext getRosRobotInvokerWithContext() {
+        return rosRobotInvokerWithContext;
     }
 
-    public void setRosRobotInstance(RosRobotInstance rosRobotInstance) {
-        this.rosRobotInstance = rosRobotInstance;
+    public void setRosRobotInvokerWithContext(RosRobotInvokerWithContext rosRobotInvokerWithContext) {
+        this.rosRobotInvokerWithContext = rosRobotInvokerWithContext;
     }
 
     public String getPublishTopicName() {
@@ -110,11 +109,5 @@ public class RobotContext implements Context {
         this.serviceRequest = serviceRequest;
     }
 
-    public ServiceResponse getServiceResponse() {
-        return serviceResponse;
-    }
 
-    public void setServiceResponse(ServiceResponse serviceResponse) {
-        this.serviceResponse = serviceResponse;
-    }
 }

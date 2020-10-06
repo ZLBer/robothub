@@ -10,7 +10,7 @@ public class ServiceContext implements Context {
     Map<String, String> headers = new HashMap<>();
     int httpMethod = 0;
     String serviceUrl;
-
+    String jobId;
     ServiceInvoker serviceInvoker;
 
     public ServiceInvoker getServiceInvoker() {
@@ -52,5 +52,13 @@ public class ServiceContext implements Context {
 
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 }

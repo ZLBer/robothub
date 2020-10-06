@@ -10,6 +10,6 @@ public class ServiceInvokerMock implements ServiceInvoker {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceInvokerMock.class);
     public AbstractMessage invoke(AbstractMessage abstractMessage) {
         LOGGER.info("ServiceInvokerMock invoker the services"+abstractMessage.getClass()+"  ");
-        return new ServiceMessage(abstractMessage.getData());
+        return new ServiceMessage(abstractMessage.getMessage());
     }
 }

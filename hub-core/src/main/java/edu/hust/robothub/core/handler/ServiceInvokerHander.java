@@ -31,6 +31,11 @@ public class ServiceInvokerHander extends AbstractHandler {
         LOGGER.info("ServiceInvokerHander begin  handle," + abstractMessage.getClass() + "  " + abstractMessage.toString());
         AbstractMessage rm = null;
 
+        if(remoteInvoker==null) {
+
+            LOGGER.info("no remoteInvoker so return:"+abstractMessage.getMessage());
+            return abstractMessage;
+        }
         try {
             rm = remoteInvoker.invoke(abstractMessage);
         } catch (Exception e) {

@@ -32,6 +32,7 @@ public class HandlerChain implements Handler {
             pre.setSuccessor(handler);
             pre = handler;
         }
+       pre.successor=new TailHander(robotContext,serviceContext);
     }
 
 

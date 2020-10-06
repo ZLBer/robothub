@@ -2,7 +2,7 @@ package edu.hust.robothub.core.job;
 
 import edu.hust.robothub.core.context.RobotContext;
 import edu.hust.robothub.core.context.ServiceContext;
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 
 public class ServiceJob extends AbstractJob {
     public ServiceJob(String jobName, RobotContext robotContext, ServiceContext serviceContext) {
@@ -12,8 +12,8 @@ public class ServiceJob extends AbstractJob {
 
     @Override
     public void doRun() {
-        RosRobotInstance rosRobotInstance = robotContext.getRosRobotInstance();
+        RosRobotInvokerWithContext rosRobotInvokerWithContext = robotContext.getRosRobotInvokerWithContext();
         //rosRobotInstance.connect();
-        rosRobotInstance.service();
+        rosRobotInvokerWithContext.service();
     }
 }

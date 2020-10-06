@@ -45,8 +45,13 @@ public enum JobManager {
         if (jobSets.containsKey(job.getJobId())) {
             return false;
         }
-        jobSets.put(job.getJobId(),job);
+        jobSets.put(job.getJobId(), job);
+        LOGGER.info("add a new job:"+job.getJobId()+"  "+job.getJobName());
         return true;
+    }
+
+    public AbstractJob getJob(String jobId){
+       return jobSets.get(jobId);
     }
 
     public boolean delJob(String jobId) {
@@ -57,23 +62,48 @@ public enum JobManager {
         return true;
     }
 
-    public boolean stopJob(String jobId) {
+    public boolean isInterupted(String jobId){
+        AbstractJob job = jobSets.get(jobId);
+        if(job.getStatus()==AbstractJob.STATUS_INTERUPTEED){
+          job.setStatus(AbstractJob.STATUS_FREE);
+            return true;
+        }
+        return false;
+    }
+
+    //强行中断
+    public boolean interupteJob(String jobId) {
         if (!jobSets.containsKey(jobId)) {
             return false;
         }
+
+        AbstractJob job = jobSets.get(jobId);
+        job.setStatus(AbstractJob.STATUS_INTERUPTEED);
         //中断执行线程
-        Thread jobExecuteThread = jobSets.get(jobId).getJobExecuteThread();
-        if(jobExecuteThread==null) return false;
+        Thread jobExecuteThread = job.gJobExecuteThread();
+        if (jobExecuteThread == null) return false;
 
         jobExecuteThread.interrupt();
 
+        job.sJobExecuteThread(null);
         return true;
     }
 
-    public void execute(AbstractJob job) {
+
+    public boolean execute(String jobId) {
+
+        if (!jobSets.containsKey(jobId)) return false;
+
+        return execute(jobSets.get(jobId));
+    }
+
+    public boolean execute(AbstractJob job) {
+
         LOGGER.info("JobManager start a new job：" + job.getJobName());
+
         executor.execute(job);
-        Thread.currentThread().interrupt();
+
+        return true;
     }
 
     public List<AbstractJob> getAllJob() {

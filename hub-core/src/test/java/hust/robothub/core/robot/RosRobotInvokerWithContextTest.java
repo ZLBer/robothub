@@ -1,6 +1,6 @@
 package hust.robothub.core.robot;
 
-import edu.hust.robothub.core.robot.RosRobotInstance;
+import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 import edu.wpi.rail.jrosbridge.Ros;
 import edu.wpi.rail.jrosbridge.services.ServiceRequest;
 import edu.hust.robothub.core.context.RobotContext;
@@ -22,9 +22,9 @@ import org.junit.After;
 * @since <pre>9月 26, 2020</pre> 
 * @version 1.0 
 */ 
-public class RosRobotInstanceTest { 
+public class RosRobotInvokerWithContextTest {
 
-RosRobotInstance rosRobotInstance;
+RosRobotInvokerWithContext rosRobotInvokerWithContext;
 @Before
 public void before() throws Exception {
   //build robotcontext
@@ -38,7 +38,7 @@ public void before() throws Exception {
   robotContext.setServiceName("");
   robotContext.setServiceType("");
   robotContext.setServiceRequest(new ServiceRequest("{}"));
-  rosRobotInstance=new RosRobotInstance(robotContext);
+  rosRobotInvokerWithContext =new RosRobotInvokerWithContext(robotContext);
 
   //build servicecontext
 
@@ -69,8 +69,8 @@ public void after() throws Exception {
 */ 
 @Test
 public void testConnect() throws Exception { 
- rosRobotInstance.connect();
- rosRobotInstance.disconnect();
+ rosRobotInvokerWithContext.connect();
+ rosRobotInvokerWithContext.disconnect();
 } 
 
 /** 
@@ -80,8 +80,7 @@ public void testConnect() throws Exception {
 */ 
 @Test
 public void testDisconnect() throws Exception { 
-//TODO: Test goes here...
-} 
+}
 
 /** 
 * 
@@ -90,8 +89,7 @@ public void testDisconnect() throws Exception {
 */ 
 @Test
 public void testGetRobotStatus() throws Exception { 
-//TODO: Test goes here... 
-} 
+}
 
 /** 
 * 
@@ -100,8 +98,8 @@ public void testGetRobotStatus() throws Exception {
 */ 
 @Test
 public void testSubscribe() throws Exception {
-  rosRobotInstance.connect();
-  rosRobotInstance.subscribe();
+  rosRobotInvokerWithContext.connect();
+  rosRobotInvokerWithContext.subscribe();
 
   System.in.read();
 } 
@@ -113,8 +111,8 @@ public void testSubscribe() throws Exception {
 */ 
 @Test
 public void testPublish() throws Exception {
- rosRobotInstance.connect();
-rosRobotInstance.publish(new RosMessage("test"));
+ rosRobotInvokerWithContext.connect();
+rosRobotInvokerWithContext.publish(new RosMessage("test"));
   System.in.read();
 } 
 
@@ -125,8 +123,8 @@ rosRobotInstance.publish(new RosMessage("test"));
 */ 
 @Test
 public void testService() throws Exception {
-  rosRobotInstance.connect();
-  rosRobotInstance.subscribe();
+  rosRobotInvokerWithContext.connect();
+  rosRobotInvokerWithContext.subscribe();
 }
 
 

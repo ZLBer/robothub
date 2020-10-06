@@ -1,6 +1,6 @@
 package edu.hust.robothub.core.service;
 
-import edu.hust.robothub.core.api.ApiValue;
+import edu.hust.robothub.core.api.ServiceResponseMessage;
 import edu.hust.robothub.core.context.ServiceContext;
 import edu.hust.robothub.core.message.AbstractMessage;
 import edu.hust.robothub.core.message.ServiceMessage;
@@ -8,7 +8,7 @@ import edu.hust.robothub.core.message.ServiceMessage;
 
 public class StandardServiceInvoker implements ServiceInvoker {
     ServiceContext serviceContext;
-    AbstractClient<ServiceMessage, ApiValue> abstractClient;
+    AbstractClient<ServiceMessage, ServiceResponseMessage> abstractClient;
 
     public StandardServiceInvoker(ServiceContext serviceContext, AbstractClient abstractClient) {
         this.serviceContext = serviceContext;
@@ -18,8 +18,8 @@ public class StandardServiceInvoker implements ServiceInvoker {
     @Override
     public AbstractMessage invoke(AbstractMessage abstractMessage) {
 
-          ApiValue apiValue = abstractClient.invokeRemote((ServiceMessage) abstractMessage, serviceContext.getHeaders(), serviceContext.getHttpMethod(), serviceContext.getServiceUrl(), ApiValue.class);
+          ServiceResponseMessage serviceResponseMessage = abstractClient.invokeRemote((ServiceMessage) abstractMessage, serviceContext.getHeaders(), serviceContext.getHttpMethod(), serviceContext.getServiceUrl(), ServiceResponseMessage.class);
 
-          return apiValue;
+          return serviceResponseMessage;
     }
 }

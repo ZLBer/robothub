@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 /**  
  *    
  * 不带有具体context的机器人调用器，可以用来表示连接上来的ros服务
- * @author BNer  
- * @date 2020/9/27 17:10
- * @param   
- * @return   
+
  */  
 public class RosRobotInvoker implements Robot {
 
@@ -45,6 +42,10 @@ public class RosRobotInvoker implements Robot {
             LOGGER.error("can't connnet to the ROS:" + ros.getURL() + ",because of " + e.toString());
         }
         return false;
+    }
+
+    public boolean isConnected(){
+        return ros.isConnected();
     }
 
     @Override
@@ -98,7 +99,8 @@ public class RosRobotInvoker implements Robot {
             ServiceResponse response = service.callServiceAndWait(serviceRequest);
             handler.handle(new RosMessage(response));
         }catch (Exception e){
-            LOGGER.error("can't get the ROS service:" + serviceName+",because of " + e.toString());
+            LOGGER.error("can't get the ROS service:" + serviceName+",because of " );
+            e.printStackTrace();
         }
 
     }

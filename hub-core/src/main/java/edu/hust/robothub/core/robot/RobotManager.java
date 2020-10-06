@@ -4,7 +4,9 @@ import edu.wpi.rail.jrosbridge.Ros;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,11 @@ public enum RobotManager {
     ;
 
     public boolean addRobot(String hostname, int port) {
-        if(checkHas(hostname,port) ) return false;
+        if (checkHas(hostname, port)) {
+            LOGGER.info("the robot already exit :" + hostname + COLON + port);
+            return false;
+        }
+
         Ros ros = new Ros(hostname, port);
         return addRobot(ros);
     }
@@ -39,27 +45,35 @@ public enum RobotManager {
 
         RosRobotInvoker rosRobotInvoker = new RosRobotInvoker(ros);
 
-        if (ros.connect()) {
-            robotSets.put(ros.getHostname() + COLON + ros.getPort(), rosRobotInvoker);
-            LOGGER.info("add a new robot " + ros.getHostname() + COLON + ros.getPort());
+        robotSets.put(ros.getHostname() + COLON + ros.getPort(), rosRobotInvoker);
+
+        LOGGER.info("add a new robot " + ros.getHostname() + COLON + ros.getPort());
+        return true;
+    }
+
+    public boolean connect(String hostname, int port) {
+        if (!checkHas(hostname, port)) return false;
+        RosRobotInvoker robot = getRobot(hostname, port);
+        robot.connect();
+        if (robot.isConnected()) {
+            LOGGER.info("connect a new robot " + hostname + ":" + port);
             return true;
 
         } else {
-            LOGGER.info("connect fail  of  robot " + ros.getHostname() + COLON + ros.getPort());
+            LOGGER.info("connect fail of robot " + hostname + ":" + port);
             return false;
         }
-
 
     }
 
     public boolean checkHas(String hostName, int port) {
-        String key =  builtKey(hostName, port);
+        String key = builtKey(hostName, port);
         return robotSets.containsKey(key);
     }
 
     public boolean delRobot(String hostName, int port) {
         String key = builtKey(hostName, port);
-        if(!checkHas(hostName,port)) return false;
+        if (!checkHas(hostName, port)) return false;
 
         Robot robot = robotSets.get(key);
 
@@ -67,14 +81,11 @@ public enum RobotManager {
 
         Ros ros = ((RosRobotInvoker) robot).getRos();
 
-        if (ros.disconnect()) {
-            robotSets.remove(key);
-            LOGGER.info("del a robot " + ros.getHostname() + COLON + ros.getPort());
-            return true;
-        } else {
-            LOGGER.info("del fail of robot " + ros.getHostname() + COLON + ros.getPort());
-            return false;
-        }
+
+        robotSets.remove(key);
+        LOGGER.info("success del a robot " + ros.getHostname() + COLON + ros.getPort());
+        return true;
+
     }
 
     public RosRobotInvoker getRobot(String hostName, int port) {
@@ -84,23 +95,26 @@ public enum RobotManager {
     public RosRobotInvoker getRobot(String rk) {
         return robotSets.get(rk);
     }
+    public List<RosRobotInvoker> getAllRobot() {
+        return new ArrayList<>(robotSets.values());
+    }
 
     public boolean checkIsConnected(String hostName, int port) {
-        if(!checkHas(hostName,port)) return false;
+        if (!checkHas(hostName, port)) return false;
 
         String key = builtKey(hostName, port);
         RosRobotInvoker rosRobotInvoker = robotSets.get(key);
 
-       if(rosRobotInvoker.getRos().isConnected()){
-          return true;
-       }else {
-          robotSets.remove(key);
-          return false;
-       }
+        if (rosRobotInvoker.getRos().isConnected()) {
+            return true;
+        } else {
+            robotSets.remove(key);
+            return false;
+        }
 
     }
 
-    private  String builtKey(String hostName,int port){
+    private String builtKey(String hostName, int port) {
         String key = hostName + COLON + port;
         return key;
     }

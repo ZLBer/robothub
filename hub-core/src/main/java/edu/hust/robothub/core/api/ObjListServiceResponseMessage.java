@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ObjListApiValue<T>  extends ApiValue {
+public class ObjListServiceResponseMessage<T>  extends ServiceResponseMessage {
     List<T> data=new ArrayList<>();
 
-    public ObjListApiValue(int code, String msg, Map<String, String> extra,List<T> data) {
+    public ObjListServiceResponseMessage(int code, String msg, Map<String, String> extra, List<T> data) {
         super(code, msg, extra);
         this.data = data;
     }
