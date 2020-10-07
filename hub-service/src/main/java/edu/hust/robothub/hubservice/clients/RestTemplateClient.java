@@ -48,7 +48,7 @@ public class RestTemplateClient<T,R> extends AbstractClient<T,R> {
          }
 
     @Override
-    public R invokeRemote(T body, Map<String, String> headers, int httpMethod, String serviceUrl,Class<R> responseType) {
+    public R invokeRemote(T body, Map<String, String> headers, int httpMethod, String serviceUrl,Class<R> responseType,boolean isInternal) {
         HttpHeaders hs=new HttpHeaders();
         for (Map.Entry<String, String> stringStringEntry : headers.entrySet()) {
             hs.add(stringStringEntry.getKey(),stringStringEntry.getValue());
@@ -61,6 +61,6 @@ public class RestTemplateClient<T,R> extends AbstractClient<T,R> {
         }
         RequestEntity<T> requestEntity=new RequestEntity<>(body,hs,getSringHttpMethod(httpMethod),url);
 
-       return invokeRemote(requestEntity,true, responseType);
+       return invokeRemote(requestEntity,false, responseType);
     }
 }

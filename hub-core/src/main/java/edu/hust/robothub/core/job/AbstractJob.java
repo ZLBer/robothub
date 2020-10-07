@@ -42,11 +42,14 @@ abstract public class AbstractJob implements Job, Runnable {
 
         this.sJobExecuteThread(Thread.currentThread()); //设置执行线程
 
+
         this.status = STATUS_RUNING;
 
         doRun();
 
     }
+
+
 
     abstract public void doRun();
 

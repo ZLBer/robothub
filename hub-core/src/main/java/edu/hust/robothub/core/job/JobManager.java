@@ -101,11 +101,18 @@ public enum JobManager {
 
         LOGGER.info("JobManager start a new job：" + job.getJobName());
 
+
+        //当job处于执行或者中断状态时禁止再次执行
+        if(!checkStatus(job.getStatus())) return false;
         executor.execute(job);
 
         return true;
     }
+    private boolean checkStatus(int status){
+        if(status==AbstractJob.STATUS_RUNING||status==AbstractJob.STATUS_RUNING) return false;
 
+        return true;
+    }
     public List<AbstractJob> getAllJob() {
         return new ArrayList<>(jobSets.values());
     }

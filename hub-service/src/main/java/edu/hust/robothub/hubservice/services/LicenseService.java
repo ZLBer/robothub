@@ -32,7 +32,7 @@ public class LicenseService {
 
     private static final Logger logger = LoggerFactory.getLogger(LicenseService.class);
 
-    @HystrixCommand
+/*    @HystrixCommand
     public License getLicense(String organizationId, String licenseId) throws InterruptedException {
        License license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
 
@@ -44,12 +44,12 @@ public class LicenseService {
                 .withContactEmail( org.getContactEmail() )
                 .withContactPhone( org.getContactPhone() )
                 .withComment(config.getExampleProperty());
-    }
+    }*/
 
-    @HystrixCommand
+/*    @HystrixCommand
     private Organization getOrganization(String organizationId) {
         return restClient.getOrganization(organizationId);
-    }
+    }*/
 
     private void randomlyRunLong(){
       Random rand = new Random();

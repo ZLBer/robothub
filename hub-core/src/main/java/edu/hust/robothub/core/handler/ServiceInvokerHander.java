@@ -39,7 +39,8 @@ public class ServiceInvokerHander extends AbstractHandler {
         try {
             rm = remoteInvoker.invoke(abstractMessage);
         } catch (Exception e) {
-            LOGGER.error("serviceInvoker brokern because  of" + e.getStackTrace());
+            LOGGER.error("serviceInvoker broken because  of" );
+            e.printStackTrace();
         }
         return rm;
     }

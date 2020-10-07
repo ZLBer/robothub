@@ -50,12 +50,12 @@ public class ServiceTest {
 
     @Test
     public  void testGetEurekaServices(){
-      discoveryService.getEurekaServices().forEach(System.out::println);
+      discoveryService.getEurekaServices().getValue().forEach(System.out::println);
     }
 
 
     @Autowired
-    RestTemplateClient<String> RestClient;
+    RestTemplateClient<String,String> RestClient;
 
     @Test
     public void testInvokeRemote() throws Exception {

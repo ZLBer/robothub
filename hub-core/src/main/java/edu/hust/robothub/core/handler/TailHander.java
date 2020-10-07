@@ -17,7 +17,7 @@ public class TailHander  extends AbstractHandler{
     public AbstractMessage handleInternal(AbstractMessage abstractMessage) {
         AbstractJob job = JobManager.getInstance().getJob(serviceContext.getJobId());
       if(job instanceof PublishJob||job instanceof ServiceJob){
-         job.setStatus(AbstractJob.STATUS_FREE);//publish 只会走一次
+         job.setStatus(AbstractJob.STATUS_FREE);//publish 和service 只会走一次
       }
       return null;
     }

@@ -7,6 +7,8 @@ import edu.hust.robothub.core.robot.RobotManager;
 import edu.hust.robothub.core.robot.RosRobotInvoker;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 管理机器人的服务
  */
@@ -19,6 +21,15 @@ public class RobotManagerService {
           return new ResultKV<>(true,"success add robot:"+hostname);
         }else{
             return new ResultKV<>(false,"fail add robot:"+hostname);
+        }
+    }
+
+
+    public ResultKV<String> connect(String hostname, int port) {
+        if(robotManager.connect(hostname, port)){
+            return new ResultKV<>(true,"success connect robot:"+hostname);
+        }else{
+            return new ResultKV<>(false,"fail connect robot:"+hostname);
         }
     }
     
@@ -37,6 +48,13 @@ public class RobotManagerService {
         }
 
         return new ResultKV<>(true,robot);
+
+    }
+
+    public ResultKV<List<RosRobotInvoker>> getAll() {
+        List<RosRobotInvoker> allRobot = robotManager.getAllRobot();
+
+        return new ResultKV<>(true,allRobot);
 
     }
 

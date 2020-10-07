@@ -42,7 +42,7 @@ import java.util.Map;
        }else if(AbstractJob.JOBTYPE_SERVICE==jobType){
            res= createServiceJob(jobName,hostname,port,(String)args.get("serviceName"),(String)args.get("serviceType"),new ServiceRequest((String)args.get("serviceRequest")));
        }else if(AbstractJob.JOBTYPE_SUBSCRIBE==jobType){
-           res=  createSubscribeJob(jobName,hostname,port,(AbstractClient)args.get("abstractClient"),Integer.parseInt((String) args.get("httpMethod")),(Map<String, String>) args.get("headers"),(String) args.get("subscribeTopicName"),(String)args.get("subscribeTopicType"),(String)args.get("publishTopicName"),(String)args.get("publicTopicType"));
+           res=  createSubscribeJob(jobName,hostname,port,(AbstractClient)args.get("abstractClient"),Integer.parseInt((String) args.get("httpMethod")),(String) args.get("serviceUrl"),(Map<String, String>) args.get("headers"),(String) args.get("subscribeTopicName"),(String)args.get("subscribeTopicType"),(String)args.get("publishTopicName"),(String)args.get("publicTopicType"));
        }else {
            LOGGER.error("no this type job");
            return new ResultKV<>(false,null);
@@ -85,7 +85,7 @@ import java.util.Map;
         return true;
     }
 
-    public ResultKV<AbstractJob> createSubscribeJob(String jobName,String hostname, int port,AbstractClient abstractClient,int httpMethod,Map<String,String> headers,String subscribeTopicName, String subscribeTopicType,String publishTopicName, String publicTopicType){
+    public ResultKV<AbstractJob> createSubscribeJob(String jobName,String hostname, int port,AbstractClient abstractClient,int httpMethod,String serviceUrl,Map<String,String> headers,String subscribeTopicName, String subscribeTopicType,String publishTopicName, String publicTopicType){
         //build robotcontext
         RobotContext robotContext = new RobotContext();
         RosRobotInvoker robot = robotManager.getRobot(hostname, port);
@@ -107,6 +107,7 @@ import java.util.Map;
         serviceContext.setHeaders(headers);
         serviceContext.setHttpMethod(httpMethod);
         serviceContext.setServiceInvoker(serviceInvoker);
+        serviceContext.setServiceUrl(serviceUrl);
 
         //build handlerChain
         HandlerChain handlerChain=new HandlerChain(robotContext,serviceContext);

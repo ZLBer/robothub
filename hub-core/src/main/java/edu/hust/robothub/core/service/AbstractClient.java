@@ -5,6 +5,6 @@ import java.util.Map;
 
 abstract public class AbstractClient<T,R> implements Client {
 
-    abstract public R invokeRemote(T body,Map<String,String> headers,int httpMethod,String serviceUrl,Class<R> responseType);
+    abstract public R invokeRemote(T body,Map<String,String> headers,int httpMethod,String serviceUrl,Class<R> responseType,boolean isInternal);
 
 }

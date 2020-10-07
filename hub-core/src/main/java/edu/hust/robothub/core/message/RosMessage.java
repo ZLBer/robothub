@@ -36,7 +36,12 @@ public class RosMessage extends AbstractMessage {
     }
 
     public  RosMessage(ServiceMessage serviceMessage){
-       rosMessage=new Message(serviceMessage.message);
+
+        try {
+            rosMessage=new Message("{\"data\":"+serviceMessage.message+"}");
+        }catch (JsonParsingException e){
+            e.printStackTrace();
+        }
     }
 
     public Message getRosMessage() {
