@@ -1,6 +1,6 @@
 package edu.hust.robothub.core.api;
 
-import edu.hust.robothub.core.result.ResultKV;
+import edu.hust.robothub.core.result.BooleanResultKV;
 
 import java.util.Map;
 
@@ -26,11 +26,11 @@ public class NullServiceResponseMessage extends ServiceResponseMessage {
         return new NullServiceResponseMessage(StatusCode.FAIL, msg, null);
     }
 
-    static public NullServiceResponseMessage getReturnValue(ResultKV<String> resultKV) {
-        if (resultKV.getKey()) {
-            return buildSuccessValue(resultKV.getValue());
+    static public NullServiceResponseMessage getReturnValue(BooleanResultKV<String> booleanResultKV) {
+        if (booleanResultKV.getKey()) {
+            return buildSuccessValue(booleanResultKV.getValue());
         } else {
-            return buildFailValue(resultKV.getValue());
+            return buildFailValue(booleanResultKV.getValue());
         }
     }
 }

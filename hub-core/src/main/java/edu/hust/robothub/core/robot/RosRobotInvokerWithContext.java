@@ -46,7 +46,7 @@ public class RosRobotInvokerWithContext implements Robot {
     }
 
     public void publish(RosMessage message) {
-        rosRobotInvoker.publish(context.getPublishTopicName(), context.getPublishTopicType(), message);
+        rosRobotInvoker.publish(context.getPublishTopicName(), context.getPublishTopicType(), message,context.getHandler());
     }
 
     public void service() {

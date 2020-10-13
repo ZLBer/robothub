@@ -6,8 +6,7 @@ import edu.hust.robothub.core.api.ObjListServiceResponseMessage;
 import edu.hust.robothub.core.api.ObjServiceResponseMessage;
 import edu.hust.robothub.core.api.StatusCode;
 import edu.hust.robothub.core.job.AbstractJob;
-import edu.hust.robothub.core.result.ResultKV;
-import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
+import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.hust.robothub.hubservice.clients.RestTemplateClient;
 import edu.hust.robothub.hubservice.services.JobManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -40,16 +38,18 @@ public class JobManagerController {
                                           @RequestBody Map<String, String> args) {
 
         Map<String, Object> cp = new HashMap<>(args);
-        cp.put("abstractClient", restTemplateClient);
-        cp.put("headers", new HashMap<>());
 
 
+        //判断需不需要加入service，不需要就是纯subscribe
+        if(args.get("serviceUrl")!=null){
+            cp.put("abstractClient", restTemplateClient);
+            cp.put("headers", new HashMap<>());
+        }
 
+        BooleanResultKV<AbstractJob> booleanResultKV = jobManagerService.add(jobType, jobName, hostName, port, cp);
 
-        ResultKV<AbstractJob> resultKV = jobManagerService.add(jobType, jobName, hostName, port, cp);
-
-        if(resultKV.getKey()){
-        return new ObjServiceResponseMessage<>(StatusCode.SUCCESS,"success to add a job",null,resultKV.getValue());
+        if(booleanResultKV.getKey()){
+        return new ObjServiceResponseMessage<>(StatusCode.SUCCESS,"success to add a job",null, booleanResultKV.getValue());
         }else {
             return new ObjServiceResponseMessage<>(StatusCode.FAIL,"fail to add a job",null,null);
         }
@@ -59,11 +59,11 @@ public class JobManagerController {
     @GetMapping("/get/{jobId}")
     public ObjServiceResponseMessage<AbstractJob> get(@PathVariable("jobId") String jobId) {
 
-        ResultKV<AbstractJob> resultKV = jobManagerService.get(jobId);
+        BooleanResultKV<AbstractJob> booleanResultKV = jobManagerService.get(jobId);
 
 
-        if(resultKV.getKey()){
-         return new ObjServiceResponseMessage<>(StatusCode.SUCCESS,"success",null,resultKV.getValue());
+        if(booleanResultKV.getKey()){
+         return new ObjServiceResponseMessage<>(StatusCode.SUCCESS,"success",null, booleanResultKV.getValue());
         }else {
             return new ObjServiceResponseMessage<>(StatusCode.FAIL,"fail to get this job:"+jobId,null,null);
         }
@@ -74,11 +74,11 @@ public class JobManagerController {
     @GetMapping("/getAll")
     public ObjListServiceResponseMessage<AbstractJob> getAll() {
 
-        ResultKV<List<AbstractJob>> resultKV = jobManagerService.getAll();
+        BooleanResultKV<List<AbstractJob>> booleanResultKV = jobManagerService.getAll();
 
 
-        if(resultKV.getKey()){
-            return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS,"success",null,resultKV.getValue());
+        if(booleanResultKV.getKey()){
+            return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS,"success",null, booleanResultKV.getValue());
         }else {
             return new ObjListServiceResponseMessage<>(StatusCode.FAIL,"fail to get  job",null,null);
         }
@@ -90,25 +90,25 @@ public class JobManagerController {
     @GetMapping("/del/{jobId}")
     public NullServiceResponseMessage add(@PathVariable("jobId") String jobId) {
 
-        ResultKV<String> resultKV = jobManagerService.del(jobId);
+        BooleanResultKV<String> booleanResultKV = jobManagerService.del(jobId);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
     @GetMapping("/stop/{jobId}")
     public NullServiceResponseMessage stop(@PathVariable("jobId") String jobId) {
 
-        ResultKV<String> resultKV = jobManagerService.stop(jobId);
+        BooleanResultKV<String> booleanResultKV = jobManagerService.stop(jobId);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
     @GetMapping("/execute/{jobId}")
     public NullServiceResponseMessage execute(@PathVariable("jobId") String jobId) {
 
-        ResultKV<String> resultKV = jobManagerService.execute(jobId);
+        BooleanResultKV<String> booleanResultKV = jobManagerService.execute(jobId);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
 

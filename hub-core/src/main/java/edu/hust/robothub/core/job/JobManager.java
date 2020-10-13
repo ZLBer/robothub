@@ -1,5 +1,7 @@
 package edu.hust.robothub.core.job;
 
+import edu.hust.robothub.core.result.JobResult;
+import edu.hust.robothub.core.result.JobResultList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @return
  */
 public enum JobManager {
+
     INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(JobManager.class);
 
@@ -36,6 +39,15 @@ public enum JobManager {
         }
     });
     Map<String, AbstractJob> jobSets = new HashMap<>();
+    Map<String, JobResultList> jobResultSets = new HashMap<>();
+
+    public  boolean addJobResult(String jobId,JobResult jobResult){
+        if(jobResultSets.containsKey(jobId)) jobResultSets.put(jobId,new JobResultList(jobId));
+
+      jobResultSets.get(jobId).addJobResult(jobResult);
+
+      return true;
+    }
 
     public static JobManager getInstance() {
         return INSTANCE;

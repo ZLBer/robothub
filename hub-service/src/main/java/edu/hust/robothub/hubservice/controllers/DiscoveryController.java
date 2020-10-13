@@ -2,7 +2,7 @@ package edu.hust.robothub.hubservice.controllers;
 
 import edu.hust.robothub.core.api.ObjListServiceResponseMessage;
 import edu.hust.robothub.core.api.StatusCode;
-import edu.hust.robothub.core.result.ResultKV;
+import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.hust.robothub.hubservice.services.DiscoveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +26,9 @@ public class DiscoveryController {
     @GetMapping(value="/services")
     public ObjListServiceResponseMessage<String> getEurekaServices() {
 
-        ResultKV<List<String>> resultKV = discoveryService.getEurekaServices();
+        BooleanResultKV<List<String>> booleanResultKV = discoveryService.getEurekaServices();
 
-        return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS,"success",null,resultKV.getValue());
+        return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS,"success",null, booleanResultKV.getValue());
 
     }
 }

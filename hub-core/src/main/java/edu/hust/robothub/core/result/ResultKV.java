@@ -1,19 +1,14 @@
 package edu.hust.robothub.core.result;
 
-public class ResultKV<V> {
-    boolean key;
+public class ResultKV<K,V>{
+    K key;
     V value;
 
-    public ResultKV(boolean key, V value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public boolean getKey() {
+    public K getKey() {
         return key;
     }
 
-    public void setKey(boolean key) {
+    public void setKey(K key) {
         this.key = key;
     }
 

@@ -5,7 +5,7 @@ import edu.hust.robothub.core.api.ObjListServiceResponseMessage;
 import edu.hust.robothub.core.api.ObjServiceResponseMessage;
 import edu.hust.robothub.core.api.StandardServiceResponseMessage;
 import edu.hust.robothub.core.api.StatusCode;
-import edu.hust.robothub.core.result.ResultKV;
+import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.hust.robothub.core.robot.RosRobotInvoker;
 import edu.hust.robothub.hubservice.services.RobotManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,63 +32,63 @@ public class RobotManagerController {
     @GetMapping("/add/{hostname}/{port}")
     public NullServiceResponseMessage add(@PathVariable("hostname") String hostname, @PathVariable("port") int port) {
 
-        ResultKV<String> resultKV = robotManagerService.add(hostname, port);
+        BooleanResultKV<String> booleanResultKV = robotManagerService.add(hostname, port);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
     @GetMapping("/connect/{hostname}/{port}")
     public NullServiceResponseMessage connect(@PathVariable("hostname") String hostname, @PathVariable("port") int port) {
 
-        ResultKV<String> resultKV = robotManagerService.connect(hostname, port);
+        BooleanResultKV<String> booleanResultKV = robotManagerService.connect(hostname, port);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
     @GetMapping("/del/{hostname}/{port}")
     public NullServiceResponseMessage del(@PathVariable("hostname") String hostname, @PathVariable("port") int port) {
 
-        ResultKV<String> resultKV = robotManagerService.remove(hostname, port);
+        BooleanResultKV<String> booleanResultKV = robotManagerService.remove(hostname, port);
 
-        return NullServiceResponseMessage.getReturnValue(resultKV);
+        return NullServiceResponseMessage.getReturnValue(booleanResultKV);
     }
 
     @GetMapping("/get/{hostname}/{port}")
     public ObjServiceResponseMessage<RosRobotInvoker> get(@PathVariable("hostname") String hostname, @PathVariable("port") int port) {
 
-        ResultKV<RosRobotInvoker> resultKV = robotManagerService.get(hostname, port);
+        BooleanResultKV<RosRobotInvoker> booleanResultKV = robotManagerService.get(hostname, port);
 
-        if (resultKV.getKey() == false) {
+        if (booleanResultKV.getKey() == false) {
             return new ObjServiceResponseMessage<>(StatusCode.FAIL, "no this ros robot", null, null);
         }
-        return new ObjServiceResponseMessage<>(StatusCode.SUCCESS, "get a ros robot", null, resultKV.getValue());
+        return new ObjServiceResponseMessage<>(StatusCode.SUCCESS, "get a ros robot", null, booleanResultKV.getValue());
     }
 
     @GetMapping("/getAll/")
     public ObjListServiceResponseMessage<RosRobotInvoker> getAll() {
 
-        ResultKV<List<RosRobotInvoker>> resultKV = robotManagerService.getAll();
+        BooleanResultKV<List<RosRobotInvoker>> booleanResultKV = robotManagerService.getAll();
 
-        if (resultKV.getKey() == false) {
+        if (booleanResultKV.getKey() == false) {
             return new ObjListServiceResponseMessage<>(StatusCode.FAIL, "", null, null);
         }
-        return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS, "get all ros robot", null, resultKV.getValue());
+        return new ObjListServiceResponseMessage<>(StatusCode.SUCCESS, "get all ros robot", null, booleanResultKV.getValue());
     }
 
     @GetMapping("/check/{hostname}/{port}")
     public StandardServiceResponseMessage checkIsConnected(@PathVariable("hostname") String hostname, @PathVariable("port") int port) {
 
-        ResultKV<String> resultKV = robotManagerService.checkIsConnected(hostname, port);
+        BooleanResultKV<String> booleanResultKV = robotManagerService.checkIsConnected(hostname, port);
         Map<String,String> data=new HashMap<>();
         int stats=0;
-        if(resultKV.getKey()){
+        if(booleanResultKV.getKey()){
             stats=StatusCode.SUCCESS;
          data.put("isConncected","true");
         }else {
             stats=StatusCode.FAIL;
          data.put("isConncected","false");
         }
-        return new StandardServiceResponseMessage(stats,resultKV.getValue(),null,data);
+        return new StandardServiceResponseMessage(stats, booleanResultKV.getValue(),null,data);
     }
 
 }

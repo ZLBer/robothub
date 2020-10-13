@@ -1,7 +1,7 @@
 package edu.hust.robothub.hubservice.services;
 
 
-import edu.hust.robothub.core.result.ResultKV;
+import edu.hust.robothub.core.result.BooleanResultKV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class DiscoveryService {
     @Autowired
     private DiscoveryClient discoveryClient;
 
-    public ResultKV<List<String>> getEurekaServices(){
+    public BooleanResultKV<List<String>> getEurekaServices(){
        List<String> services = new ArrayList<String>();
 
         discoveryClient.getServices().forEach(serviceName -> {
@@ -30,7 +30,7 @@ public class DiscoveryService {
             });
         });
 
-        return new ResultKV<>(true,services);
+        return new BooleanResultKV<>(true,services);
     }
 
 
