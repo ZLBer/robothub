@@ -39,17 +39,14 @@ public class JobManagerService {
     }
 
     public BooleanResultKV<String> del(String jobId){
-          if(jobManager.delJob(jobId)){
-           return  new BooleanResultKV<>(true,"success del job:"+jobId);
-          }else {
-            return new BooleanResultKV<>(false,"fail del job"+jobId);
-          }
+        return jobManager.delJob(jobId);
     }
     public BooleanResultKV<String> execute(String jobId){
-        if(jobManager.execute(jobId)){
-            return  new BooleanResultKV<>(true,"success execute job:"+jobId);
+        BooleanResultKV<String> resultKV = jobManager.execute(jobId);
+        if(resultKV.getKey()) {
+            return  new BooleanResultKV<>(true,"success execute job <"+jobId+">");
         }else {
-            return new BooleanResultKV<>(false,"fail execute job:"+jobId);
+            return new BooleanResultKV<>(false,resultKV.getValue());
         }
     }
 
@@ -66,4 +63,6 @@ public class JobManagerService {
         List<AbstractJob> allJob = jobManager.getAllJob();
         return  new BooleanResultKV<>(true,allJob);
     }
+
+
 }

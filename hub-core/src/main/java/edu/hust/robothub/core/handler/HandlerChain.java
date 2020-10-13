@@ -4,8 +4,21 @@ import edu.hust.robothub.core.context.RobotContext;
 import edu.hust.robothub.core.context.ServiceContext;
 import edu.hust.robothub.core.message.AbstractMessage;
 
-public class HandlerChain implements Handler {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+public class HandlerChain implements Handler {
+    private static ExecutorService executor = new ThreadPoolExecutor(20, 200,
+            60L, TimeUnit.SECONDS,
+            new LinkedBlockingDeque<>(), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "JOB-EXECUTOR-" + r.hashCode());
+        }
+    });
 
     RobotContext robotContext;
     ServiceContext serviceContext;
@@ -21,7 +34,13 @@ public class HandlerChain implements Handler {
 
     @Override
     public void handle(AbstractMessage abstractMessage) {
-        firstHander.handle(abstractMessage);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+         firstHander.handle(abstractMessage);
+            }
+        });
+
     }
 
 

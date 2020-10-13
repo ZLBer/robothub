@@ -88,7 +88,7 @@ public class RosRobotInvoker implements Robot {
         try {
             Topic topic = new Topic(ros, topicName, topicType);
             topic.publish(message.getRosMessage());
-            handler.handle(message);
+           // handler.handle(message);
         } catch (Exception e) {
             LOGGER.error("can't publish to the ROS topic:" + topicName + ",because of " + e.toString());
         }

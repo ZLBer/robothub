@@ -1,5 +1,6 @@
 package edu.hust.robothub.core.job;
 
+import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.hust.robothub.core.result.JobResult;
 import edu.hust.robothub.core.result.JobResultList;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public enum JobManager {
     INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(JobManager.class);
 
-    static ExecutorService executor = new ThreadPoolExecutor(20, 200,
+    private static ExecutorService executor = new ThreadPoolExecutor(20, 200,
             60L, TimeUnit.SECONDS,
             new LinkedBlockingDeque<>(), new ThreadFactory() {
         @Override
@@ -41,16 +42,16 @@ public enum JobManager {
     Map<String, AbstractJob> jobSets = new HashMap<>();
     Map<String, JobResultList> jobResultSets = new HashMap<>();
 
-    public  boolean addJobResult(String jobId,JobResult jobResult){
-        if(jobResultSets.containsKey(jobId)) jobResultSets.put(jobId,new JobResultList(jobId));
-
-      jobResultSets.get(jobId).addJobResult(jobResult);
-
-      return true;
-    }
-
     public static JobManager getInstance() {
         return INSTANCE;
+    }
+
+    public boolean addJobResult(String jobId, JobResult jobResult) {
+        if (jobResultSets.containsKey(jobId)) jobResultSets.put(jobId, new JobResultList(jobId));
+
+        jobResultSets.get(jobId).addJobResult(jobResult);
+
+        return true;
     }
 
     public boolean addJob(AbstractJob job) {
@@ -58,26 +59,26 @@ public enum JobManager {
             return false;
         }
         jobSets.put(job.getJobId(), job);
-        LOGGER.info("add a new job:"+job.getJobId()+"  "+job.getJobName());
+        LOGGER.info("add a new job:" + job.getJobId() + "  " + job.getJobName());
         return true;
     }
 
-    public AbstractJob getJob(String jobId){
-       return jobSets.get(jobId);
+    public AbstractJob getJob(String jobId) {
+        return jobSets.get(jobId);
     }
 
-    public boolean delJob(String jobId) {
+    public BooleanResultKV<String> delJob(String jobId) {
         if (!jobSets.containsKey(jobId)) {
-            return false;
+            return new BooleanResultKV<>(false, "the job <" + jobId + ">  not exit");
         }
         jobSets.remove(jobId);
-        return true;
+        return new BooleanResultKV<>(true, "sucess del a job <" + jobId + ">");
     }
 
-    public boolean isInterupted(String jobId){
+    public boolean isInterupted(String jobId) {
         AbstractJob job = jobSets.get(jobId);
-        if(job.getStatus()==AbstractJob.STATUS_INTERUPTEED){
-          job.setStatus(AbstractJob.STATUS_FREE);
+        if (job.getStatus() == AbstractJob.STATUS_INTERUPTEED) {
+            job.setStatus(AbstractJob.STATUS_FREE);
             return true;
         }
         return false;
@@ -102,29 +103,37 @@ public enum JobManager {
     }
 
 
-    public boolean execute(String jobId) {
+    public  BooleanResultKV<String> execute(String jobId) {
+        if (!jobSets.containsKey(jobId))
+            return new BooleanResultKV<>(false,"the job <"+jobId+"> not exit");
 
-        if (!jobSets.containsKey(jobId)) return false;
+        AbstractJob abstractJob = jobSets.get(jobId);
+
+        if(!abstractJob.checkRosConnect()){
+            return new BooleanResultKV<>(false,"the job of ros is not connect");
+        }
 
         return execute(jobSets.get(jobId));
     }
 
-    public boolean execute(AbstractJob job) {
+    public BooleanResultKV<String> execute(AbstractJob job) {
 
         LOGGER.info("JobManager start a new job：" + job.getJobName());
 
 
         //当job处于执行或者中断状态时禁止再次执行
-        if(!checkStatus(job.getStatus())) return false;
+        if (!checkStatus(job.getStatus()))
+            return new BooleanResultKV<>(false, "the job status is not right:" + job.getStatus());
         executor.execute(job);
+        return new BooleanResultKV<>(true, "");
+    }
+
+    private boolean checkStatus(int status) {
+        if (status == AbstractJob.STATUS_RUNING || status == AbstractJob.STATUS_RUNING) return false;
 
         return true;
     }
-    private boolean checkStatus(int status){
-        if(status==AbstractJob.STATUS_RUNING||status==AbstractJob.STATUS_RUNING) return false;
 
-        return true;
-    }
     public List<AbstractJob> getAllJob() {
         return new ArrayList<>(jobSets.values());
     }

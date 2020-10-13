@@ -49,7 +49,9 @@ abstract public class AbstractJob implements Job, Runnable {
 
     }
 
-
+   public  boolean checkRosConnect(){
+     return   robotContext.getRos().isConnected();
+   }
 
     abstract public void doRun();
 

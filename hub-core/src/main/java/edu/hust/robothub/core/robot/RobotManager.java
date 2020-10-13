@@ -1,5 +1,6 @@
 package edu.hust.robothub.core.robot;
 
+import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.wpi.rail.jrosbridge.Ros;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +32,15 @@ public enum RobotManager {
 
     ;
 
-    public boolean addRobot(String hostname, int port) {
+    public BooleanResultKV<String> addRobot(String hostname, int port) {
         if (checkHas(hostname, port)) {
             LOGGER.info("the robot already exit :" + hostname + COLON + port);
-            return false;
+            return new BooleanResultKV<>(false, "the robot already exit :" + hostname + COLON + port);
         }
 
         Ros ros = new Ros(hostname, port);
-        return addRobot(ros);
+        addRobot(ros);
+        return new BooleanResultKV<>(true, "add a new robot " + ros.getHostname() + COLON + ros.getPort());
     }
 
     private boolean addRobot(Ros ros) {
@@ -51,17 +53,18 @@ public enum RobotManager {
         return true;
     }
 
-    public boolean connect(String hostname, int port) {
-        if (!checkHas(hostname, port)) return false;
+    public BooleanResultKV<String> connect(String hostname, int port) {
+        if (!checkHas(hostname, port))
+            return new BooleanResultKV<>(false,"the robot not exit :" + hostname + COLON + port);
         RosRobotInvoker robot = getRobot(hostname, port);
         robot.connect();
         if (robot.isConnected()) {
             LOGGER.info("connect a new robot " + hostname + ":" + port);
-            return true;
+            return new BooleanResultKV<>(true,"connect a new robot " + hostname + ":" + port);
 
         } else {
             LOGGER.info("connect fail of robot " + hostname + ":" + port);
-            return false;
+            return new BooleanResultKV<>(false,"connect fail of robot " + hostname + ":" + port);
         }
 
     }
@@ -71,20 +74,18 @@ public enum RobotManager {
         return robotSets.containsKey(key);
     }
 
-    public boolean delRobot(String hostName, int port) {
+    public BooleanResultKV<String> delRobot(String hostName, int port) {
         String key = builtKey(hostName, port);
-        if (!checkHas(hostName, port)) return false;
+        if (!checkHas(hostName, port))
+            return new BooleanResultKV<>(false,"the robot not exit :" + hostName + COLON + port);
 
         Robot robot = robotSets.get(key);
 
-        if (robot == null) return false;
-
         Ros ros = ((RosRobotInvoker) robot).getRos();
-
 
         robotSets.remove(key);
         LOGGER.info("success del a robot " + ros.getHostname() + COLON + ros.getPort());
-        return true;
+        return new BooleanResultKV<>(true,"success del a robot " + ros.getHostname() + COLON + ros.getPort());
 
     }
 
@@ -95,6 +96,7 @@ public enum RobotManager {
     public RosRobotInvoker getRobot(String rk) {
         return robotSets.get(rk);
     }
+
     public List<RosRobotInvoker> getAllRobot() {
         return new ArrayList<>(robotSets.values());
     }

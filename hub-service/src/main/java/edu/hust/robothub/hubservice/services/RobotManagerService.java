@@ -16,28 +16,16 @@ public class RobotManagerService {
     RobotManager robotManager = RobotManager.getInstance();
 
     public BooleanResultKV<String> add(String hostname, int port) {
-        if(robotManager.addRobot(hostname, port)){
-          return new BooleanResultKV<>(true,"success add robot:"+hostname);
-        }else{
-            return new BooleanResultKV<>(false,"fail add robot:"+hostname);
-        }
+        return robotManager.addRobot(hostname, port);
     }
 
 
     public BooleanResultKV<String> connect(String hostname, int port) {
-        if(robotManager.connect(hostname, port)){
-            return new BooleanResultKV<>(true,"success connect robot:"+hostname);
-        }else{
-            return new BooleanResultKV<>(false,"fail connect robot:"+hostname);
-        }
+        return  robotManager.connect(hostname, port);
     }
     
     public BooleanResultKV<String> remove(String hostname, int port) {
-      if(robotManager.delRobot(hostname,port)){
-          return new BooleanResultKV<>(true,"success remove robot:"+hostname);
-      }else {
-          return new BooleanResultKV<>(false,"fail remove robot:"+hostname);
-      }
+      return robotManager.delRobot(hostname,port);
     }
 
     public BooleanResultKV<RosRobotInvoker> get(String hostname, int port) {
