@@ -5,6 +5,8 @@ import edu.hust.robothub.core.job.AbstractJob;
 import edu.hust.robothub.core.job.JobFactory;
 import edu.hust.robothub.core.job.JobManager;
 import edu.hust.robothub.core.result.BooleanResultKV;
+import edu.hust.robothub.core.result.JobResult;
+import edu.hust.robothub.core.result.JobResultList;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +65,8 @@ public class JobManagerService {
         List<AbstractJob> allJob = jobManager.getAllJob();
         return  new BooleanResultKV<>(true,allJob);
     }
+
+
 
 
 }

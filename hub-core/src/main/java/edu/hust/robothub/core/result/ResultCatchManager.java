@@ -8,7 +8,6 @@ public enum ResultCatchManager {
     Instance;
 
     private ConcurrentHashMap<String, JobResultList> resultMap = new ConcurrentHashMap<>();
-
     static public ResultCatchManager getInstance() {
         return Instance;
     }

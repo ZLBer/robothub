@@ -109,15 +109,17 @@ public enum JobManager {
 
         AbstractJob abstractJob = jobSets.get(jobId);
 
-        if(!abstractJob.checkRosConnect()){
-            return new BooleanResultKV<>(false,"the job of ros is not connect");
-        }
+
 
         return execute(jobSets.get(jobId));
     }
 
     public BooleanResultKV<String> execute(AbstractJob job) {
 
+
+        if(!job.checkRosConnect()){
+            return new BooleanResultKV<>(false,"the job of ros is not connect");
+        }
         LOGGER.info("JobManager start a new job：" + job.getJobName());
 
 
