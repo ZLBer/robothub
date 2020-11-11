@@ -1,4 +1,4 @@
-package hust.robothub.core.robot;
+package edu.hust.robothub.core;
 
 import edu.hust.robothub.core.robot.RosRobotInvokerWithContext;
 import edu.wpi.rail.jrosbridge.Ros;
