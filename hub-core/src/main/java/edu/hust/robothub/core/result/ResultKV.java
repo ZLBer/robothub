@@ -4,6 +4,14 @@ public class ResultKV<K,V>{
     K key;
     V value;
 
+    public ResultKV(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public ResultKV() {
+    }
+
     public K getKey() {
         return key;
     }

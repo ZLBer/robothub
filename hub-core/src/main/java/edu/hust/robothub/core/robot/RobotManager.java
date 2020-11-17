@@ -1,18 +1,17 @@
 package edu.hust.robothub.core.robot;
 
+import edu.hust.robothub.core.cache.Cache;
+import edu.hust.robothub.core.cache.StandardCache;
 import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.wpi.rail.jrosbridge.Ros;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用于机器人调用实例的添加、删除和暂存
- * 单例，系统内唯一存在
+ * 单例模式，系统内唯一存在
  *
  * @param
  * @author BNer
@@ -21,10 +20,11 @@ import java.util.Map;
  */
 public enum RobotManager {
     INSTANCE;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RosRobotInvoker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RobotManager.class);
 
     private final String COLON = ":";
-    private Map<String, RosRobotInvoker> robotSets = new HashMap<>();
+   // private Map<String, RosRobotInvoker> robotSets = new HashMap<>();
+    private Cache<String,RosRobotInvoker> robotCache = new StandardCache<>();
 
     static public RobotManager getInstance() {
         return INSTANCE;
@@ -47,7 +47,8 @@ public enum RobotManager {
 
         RosRobotInvoker rosRobotInvoker = new RosRobotInvoker(ros);
 
-        robotSets.put(ros.getHostname() + COLON + ros.getPort(), rosRobotInvoker);
+       // robotSets.put(ros.getHostname() + COLON + ros.getPort(), rosRobotInvoker);
+        robotCache.cache(ros.getHostname() + COLON + ros.getPort(), rosRobotInvoker);
 
         LOGGER.info("add a new robot " + ros.getHostname() + COLON + ros.getPort());
         return true;
@@ -71,7 +72,8 @@ public enum RobotManager {
 
     public boolean checkHas(String hostName, int port) {
         String key = builtKey(hostName, port);
-        return robotSets.containsKey(key);
+        //return robotSets.containsKey(key);
+        return robotCache.containsKey(key);
     }
 
     public BooleanResultKV<String> delRobot(String hostName, int port) {
@@ -79,11 +81,13 @@ public enum RobotManager {
         if (!checkHas(hostName, port))
             return new BooleanResultKV<>(false,"the robot not exit :" + hostName + COLON + port);
 
-        Robot robot = robotSets.get(key);
+        //Robot robot = robotSets.get(key);
+        Robot robot = robotCache.getCache(key);
 
         Ros ros = ((RosRobotInvoker) robot).getRos();
 
-        robotSets.remove(key);
+        //robotSets.remove(key);
+
         LOGGER.info("success del a robot " + ros.getHostname() + COLON + ros.getPort());
         return new BooleanResultKV<>(true,"success del a robot " + ros.getHostname() + COLON + ros.getPort());
 
@@ -94,23 +98,26 @@ public enum RobotManager {
     }
 
     public RosRobotInvoker getRobot(String rk) {
-        return robotSets.get(rk);
+      //  return robotSets.get(rk);
+     return robotCache.getCache(rk);
     }
 
     public List<RosRobotInvoker> getAllRobot() {
-        return new ArrayList<>(robotSets.values());
+      //  return new ArrayList<>(robotSets.values());
+      return robotCache.getAllValues();
     }
 
     public boolean checkIsConnected(String hostName, int port) {
         if (!checkHas(hostName, port)) return false;
 
         String key = builtKey(hostName, port);
-        RosRobotInvoker rosRobotInvoker = robotSets.get(key);
+       // RosRobotInvoker rosRobotInvoker = robotSets.get(key);
+        RosRobotInvoker rosRobotInvoker = robotCache.getCache(key);
 
         if (rosRobotInvoker.getRos().isConnected()) {
             return true;
         } else {
-            robotSets.remove(key);
+           // robotSets.remove(key);
             return false;
         }
 

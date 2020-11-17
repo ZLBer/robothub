@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.UUID;
 
-abstract public class AbstractJob implements Job, Runnable {
+abstract public class AbstractJob implements Job {
     public static final int STATUS_NEW = 0;
     public static final int STATUS_RUNING = 1;
     public static final int STATUS_END = 2;
     public static final int STATUS_FREE = 3;
-    public static final int STATUS_INTERUPTEED = 4;
+    public static final int STATUS_INTERUPTED = 4;
 
     public static final int JOBTYPE_PUBLISH = 0;
     public static final int JOBTYPE_SERVICE = 1;
@@ -42,7 +42,6 @@ abstract public class AbstractJob implements Job, Runnable {
 
         this.sJobExecuteThread(Thread.currentThread()); //设置执行线程
 
-
         this.status = STATUS_RUNING;
 
         doRun();
@@ -53,6 +52,7 @@ abstract public class AbstractJob implements Job, Runnable {
      return   robotContext.getRos().isConnected();
    }
 
+    //策略模式
     abstract public void doRun();
 
     public String getJobName() {

@@ -28,6 +28,8 @@ import java.util.Map;
 
 /** 用于构建job
 */
+
+//工厂模式
  public enum  JobFactory {
     INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(JobFactory.class);

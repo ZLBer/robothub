@@ -18,7 +18,6 @@ public class PublishJob extends AbstractJob {
     @Override
     public void doRun() {
         RosRobotInvokerWithContext rosRobotInvokerWithContext = robotContext.getRosRobotInvokerWithContext();
-       // rosRobotInstance.connect();
         rosRobotInvokerWithContext.publish(rosMessage);
     }
 

@@ -10,6 +10,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+
+//责任链模式
 public class HandlerChain implements Handler {
     private static ExecutorService executor = new ThreadPoolExecutor(20, 200,
             60L, TimeUnit.SECONDS,
@@ -37,7 +39,7 @@ public class HandlerChain implements Handler {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-         firstHander.handle(abstractMessage);
+          firstHander.handle(abstractMessage);
             }
         });
 
