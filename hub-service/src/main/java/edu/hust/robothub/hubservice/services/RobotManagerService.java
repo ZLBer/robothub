@@ -4,8 +4,13 @@ package edu.hust.robothub.hubservice.services;
 import edu.hust.robothub.core.result.BooleanResultKV;
 import edu.hust.robothub.core.robot.RobotManager;
 import edu.hust.robothub.core.robot.RosRobotInvoker;
+import edu.hust.robothub.hubservice.model.RobotModule;
+import edu.hust.robothub.hubservice.repository.RobotRepository;
+import edu.wpi.rail.jrosbridge.Ros;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +19,7 @@ import java.util.List;
 @Service
 public class RobotManagerService {
     RobotManager robotManager = RobotManager.getInstance();
+
 
     public BooleanResultKV<String> add(String hostname, int port) {
         return robotManager.addRobot(hostname, port);
