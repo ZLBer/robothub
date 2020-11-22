@@ -7,6 +7,8 @@ import edu.hust.robothub.core.result.JobResult;
 import edu.hust.robothub.core.result.JobResultList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -42,7 +44,7 @@ public enum JobManager  {
    // Map<String, JobResultList> jobResultSets = new HashMap<>();
 
     Cache<String,AbstractJob> jobCache = new StandardCache<>();
-    Cache<String,JobResultList> jonResultCatch = new StandardCache<>();
+    Cache<String,JobResultList> jobResultCatch = new StandardCache<>();
 
 
 
@@ -53,12 +55,30 @@ public enum JobManager  {
 
     public boolean addJobResult(String jobId, JobResult jobResult) {
         //if (jobResultSets.containsKey(jobId)) jobResultSets.put(jobId, new JobResultList(jobId));
-        if (jonResultCatch.containsKey(jobId)) jonResultCatch.cache(jobId, new JobResultList(jobId));
+        if (!jobResultCatch.containsKey(jobId)) jobResultCatch.cache(jobId, new JobResultList(jobId));
        // jobResultSets.get(jobId).addJobResult(jobResult);
-        jonResultCatch.getCache(jobId).addJobResult(jobResult);
+        jobResultCatch.getCache(jobId).addJobResult(jobResult);
 
         return true;
     }
+
+    public BooleanResultKV<JobResultList> getJobResults(String jobId){
+
+        if(!jobResultCatch.containsKey(jobId)) return new BooleanResultKV<>(false,null);
+
+      return new BooleanResultKV<>(true,jobResultCatch.getCache(jobId));
+    }
+
+    public BooleanResultKV<List<JobResultList>> getAllJobResults(){
+        List<JobResultList> allValues = jobResultCatch.getAllValues();
+        if(allValues.isEmpty()){
+           return new BooleanResultKV<>(false,null);
+        }else {
+            return new BooleanResultKV<>(true,allValues);
+        }
+
+    }
+
 
     public boolean addJob(AbstractJob job) {
        // if (jobSets.containsKey(job.getJobId())) {
@@ -82,6 +102,8 @@ public enum JobManager  {
         if (!jobCache.containsKey(jobId)) {
             return new BooleanResultKV<>(false, "the job <" + jobId + ">  not exit");
         }
+
+        //TODO：
       //  jobSets.remove(jobId);
         return new BooleanResultKV<>(true, "sucess del a job <" + jobId + ">");
     }

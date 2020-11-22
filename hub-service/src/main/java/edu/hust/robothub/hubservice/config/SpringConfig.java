@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 //用于读取spring cloud的config文件
 @Component
-public class SringConfig extends Config implements BeanFactoryAware {
+public class SpringConfig extends Config implements BeanFactoryAware {
 
 
     @Override

@@ -1,8 +1,6 @@
 package edu.hust.robothub.core.cache;
 
-import com.sun.org.apache.regexp.internal.RE;
 import edu.hust.robothub.core.result.ResultKV;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +45,6 @@ public class StandardCache<K,V> extends AbstratCache<K,V> {
 
     @Override
     public List<V> getAllValues() {
-        return (List<V>) cacheMap.values();
+        return new ArrayList<>( cacheMap.values());
     }
 }

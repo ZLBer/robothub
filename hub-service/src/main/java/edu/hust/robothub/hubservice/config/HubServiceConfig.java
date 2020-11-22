@@ -13,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 
+
+
+//进行服务的一些基础配置
+
 @Component
 public class HubServiceConfig {
 

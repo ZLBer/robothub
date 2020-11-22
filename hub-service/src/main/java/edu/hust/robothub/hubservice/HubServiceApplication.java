@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**hub核心服务，用于协调调用和基本的状态管理
 */
- @SpringBootApplication
+@SpringBootApplication
 @EnableEurekaClient
 @EnableCircuitBreaker
 public class HubServiceApplication {

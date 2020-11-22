@@ -15,6 +15,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+
+
+//用来调用服务的
+
 @Component
 public class RestTemplateClient<T,R> extends AbstractClient<T,R> {
      /**用于调用hub系统内布的服务*/

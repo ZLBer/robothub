@@ -3,6 +3,7 @@ package edu.hust.robothub.core.storage;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import edu.hust.robothub.core.until.Config;
+import edu.hust.robothub.core.until.SampleConfig;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,15 +13,14 @@ import java.io.FileNotFoundException;
 
 
 public class CosStorageTest {
-    Config config = Config.INSTANCE;
+    Config config = SampleConfig.getSelf();
     CosStorage cosStorage;
 
     @Before
     public void setUp() throws Exception {
 
-       //测试阿里云泄露
-      config.setConfigKV(CosStorage.COS_SECREDKEY,"LTAI4GH5yWCDcvXUFFW2x11K");
-      config.setConfigKV(CosStorage.COS_SECRETID,"erIWuFHrUu7QHuHFRhxLkFy1cUyIQ3");
+      config.setConfigKV(CosStorage.COS_SECREDKEY,"KOrAFCuQCH6dux60gDVq11mHWpulY5MN");
+      config.setConfigKV(CosStorage.COS_SECRETID,"AKID1h7rOizS0ASVKxpZUBdMr9GDvIVSBcDb");
       config.setConfigKV(CosStorage.REGION_NAME,"ap-nanjing");
 
       cosStorage = new CosStorage(config);
